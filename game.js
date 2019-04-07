@@ -1,7 +1,7 @@
 
 function preload() {
  this.load.image("bombe","./bilder/bombe.png");
- this.load.image("soldat","./bilder/soldat.png");
+ this.load.image("spieler","./bilder/spieler.png");
  this.load.image("untergrund","./bilder/untergrund.png");
 
 
@@ -13,29 +13,30 @@ function create () {
 
   gameState.cursors = this.input.keyboard.createCursorKeys();
 
-  gameState.player = this.physics.add.sprite(225, 400,"soldat").setScale(.15);
+  gameState.player = this.physics.add.sprite(225, 400,"spieler").setScale(.6);
 
   const platform = this.physics.add.staticGroup();
   platform.create(225, 510,"untergrund");
 
-  gameState.player.setColliderWorldBounds(true);
+  gameState.player.setCollideWorldBounds(true);
 
   this.physics.add.collider(platform, gameState.player);
 
   const bombs = this.physics.add.group();
+
   function bombGen(){
-    const xCoord = Math.random * 450;
-    gameState.bombs.create(xCoord, 10, "bombe");
+    const xCoord = Math.random() * 450;
+    bombs.create(xCoord, 10, "bombe").setScale(.02);
   }
 
-  gameState.bombLoop = this.time.addEvent({
+  const bombLoop = this.time.addEvent({
+    delay: 100,
     callback: bombGen,
-    delay: 200,
     calbackScope: this,
     loop: true
   });
 
-  gameState.scoreText = this.add.text(225, 510,"Score: 0", {fontSize: "15px", fill: "#000"});
+  gameState.scoreText = this.add.text(195, 485,"Score: 0", {fontSize: "15px", fill: "#000000"});
   gameState.score = 0;
 
   this.physics.add.collider(bombs, platform, (bomb)=>{
@@ -44,13 +45,11 @@ function create () {
     gameState.scoreText.setText(`Score: ${gameState.score}`);
   });
 
-  gameState.scoreText = this.add.text(225, 510,"Score: 0", {fontSize: "15px", fill: "#000"});
-  gameState.score = 0;
 
   this.physics.add.collider(gameState.player, bombs, ()=>{
-    gameState.bombLoop.destroy();
+    bombLoop.destroy();
     this.physics.pause();
-    this.add.text(150, 250, "Game Over", {fontSize: "15px", fill: "#000"});
+    this.add.text(150, 250, "Game Over", {fontSize: "15px", fill: "#000000"});
     this.add.text(150, 270, 'Click to Restart', { fontSize: '15px', fill: '#000000' });
   });
 
