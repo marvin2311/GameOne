@@ -3,7 +3,7 @@ function preload() {
  this.load.image("bombe","./bilder/bombe.png");
  this.load.image("spieler","./bilder/spieler.png");
  this.load.image("untergrund","./bilder/untergrund.png");
-
+ this.load.image("hintergrund", "./bilder/background.png")
 
 }
 
@@ -12,6 +12,7 @@ function preload() {
 function create () {
 
   gameState.cursors = this.input.keyboard.createCursorKeys();
+  const backG = this.add.image(220,270, "hintergrund");
 
   gameState.player = this.physics.add.sprite(225, 400,"spieler").setScale(.6);
 
@@ -26,7 +27,7 @@ function create () {
 
   function bombGen(){
     const xCoord = Math.random() * 450;
-    bombs.create(xCoord, 10, "bombe").setScale(.02);
+    bombs.create(xCoord, 10, "bombe").setScale(.025);
   }
 
   const bombLoop = this.time.addEvent({
@@ -36,7 +37,7 @@ function create () {
     loop: true
   });
 
-  gameState.scoreText = this.add.text(195, 485,"Score: 0", {fontSize: "15px", fill: "#000000"});
+  gameState.scoreText = this.add.text(185, 480,"Score: 0", {fontSize: "15px", fill: "#ae0800"});
   gameState.score = 0;
 
   this.physics.add.collider(bombs, platform, (bomb)=>{
@@ -49,8 +50,8 @@ function create () {
   this.physics.add.collider(gameState.player, bombs, ()=>{
     bombLoop.destroy();
     this.physics.pause();
-    this.add.text(150, 250, "Game Over", {fontSize: "15px", fill: "#000000"});
-    this.add.text(150, 270, 'Click to Restart', { fontSize: '15px', fill: '#000000' });
+    this.add.text(170, 250, "Game Over", {fontSize: "20px", fill: "#0404B4"});
+    this.add.text(150, 270, 'Click to Restart', { fontSize: '15px', fill: '#0404B4' });
   });
 
   this.input.on("pointerup", ()=>{
